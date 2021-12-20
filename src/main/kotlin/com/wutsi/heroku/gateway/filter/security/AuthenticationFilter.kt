@@ -5,6 +5,11 @@ import com.netflix.zuul.context.RequestContext
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
+/**
+ * This filter inspect the Authentication token in each request, and ensure that
+ * - The token is valid
+ * - The owner of the token is still active
+ */
 @Service
 class AuthenticationFilter(private val keyVerifier: KeyVerifier) : ZuulFilter() {
     companion object {
