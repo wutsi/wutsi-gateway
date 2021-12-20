@@ -2,6 +2,7 @@ package com.wutsi.heroku.gateway.filter.security
 
 import com.auth0.jwt.JWT
 import com.wutsi.platform.account.WutsiAccountApi
+import com.wutsi.platform.core.logging.KVLogger
 import com.wutsi.platform.core.security.SubjectType
 import com.wutsi.platform.core.security.spring.jwt.JWTBuilder
 import com.wutsi.platform.security.WutsiSecurityApi
@@ -10,15 +11,21 @@ import org.springframework.stereotype.Service
 @Service
 open class SubjectVerifier(
     private val securityApi: WutsiSecurityApi,
-    private val accountApi: WutsiAccountApi
+    private val accountApi: WutsiAccountApi,
+    private val logger: KVLogger
 ) {
     fun verify(key: String) {
         val jwt = JWT.decode(key)
         val type = jwt.claims[JWTBuilder.CLAIM_SUBJECT_TYPE]
+        val subject = jwt.subject
+
+        logger.add("subject", subject)
+        logger.add("subject_type", type)
+
         if (SubjectType.APPLICATION.name.equals(type?.asString(), true)) {
-            validateApplication(jwt.subject.toLong())
+            validateApplication(subject.toLong())
         } else if (SubjectType.USER.name.equals(type?.asString(), true)) {
-            validateAccount(jwt.subject.toLong())
+            validateAccount(subject.toLong())
         } else
             throw IllegalStateException("Invalid subject_type: $type")
     }

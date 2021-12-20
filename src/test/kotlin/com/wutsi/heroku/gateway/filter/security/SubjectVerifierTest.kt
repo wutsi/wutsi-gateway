@@ -6,7 +6,7 @@ import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.platform.account.WutsiAccountApi
 import com.wutsi.platform.account.dto.Account
 import com.wutsi.platform.account.dto.GetAccountResponse
-import com.wutsi.platform.core.security.KeyProvider
+import com.wutsi.platform.core.logging.KVLogger
 import com.wutsi.platform.core.security.SubjectType
 import com.wutsi.platform.core.security.spring.jwt.JWTBuilder
 import com.wutsi.platform.core.test.TestRSAKeyProvider
@@ -21,14 +21,15 @@ internal class SubjectVerifierTest {
     private lateinit var securityApi: WutsiSecurityApi
     private lateinit var accountApi: WutsiAccountApi
     private lateinit var verifier: SubjectVerifier
-    private lateinit var keyProvider: KeyProvider
+    private lateinit var logger: KVLogger
 
     @BeforeEach
     fun setUp() {
         securityApi = mock()
         accountApi = mock()
+        logger = mock()
 
-        verifier = SubjectVerifier(securityApi, accountApi)
+        verifier = SubjectVerifier(securityApi, accountApi, logger)
     }
 
     @Test
