@@ -2,6 +2,7 @@ package com.wutsi.heroku.gateway.filter.security
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
+import com.wutsi.platform.core.security.KeyProvider
 import org.springframework.stereotype.Service
 import java.security.interfaces.RSAPublicKey
 

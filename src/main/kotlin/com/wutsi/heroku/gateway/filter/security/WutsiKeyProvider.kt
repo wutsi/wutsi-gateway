@@ -1,5 +1,6 @@
 package com.wutsi.heroku.gateway.filter.security
 
+import com.wutsi.platform.core.security.KeyProvider
 import com.wutsi.platform.security.WutsiSecurityApi
 import org.springframework.cache.Cache
 import org.springframework.stereotype.Service

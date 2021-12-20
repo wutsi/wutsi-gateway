@@ -4,7 +4,9 @@ import com.netflix.zuul.context.RequestContext
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
+import com.wutsi.platform.core.logging.KVLogger
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -17,7 +19,9 @@ internal class AuthenticationFilterTest {
     private lateinit var filter: AuthenticationFilter
     private lateinit var request: HttpServletRequest
     private lateinit var response: HttpServletResponse
-    private lateinit var verifier: KeyVerifier
+    private lateinit var keyVerifier: KeyVerifier
+    private lateinit var subjectVerifier: SubjectVerifier
+    private lateinit var logger: KVLogger
     private lateinit var context: RequestContext
 
     @BeforeEach
@@ -30,9 +34,11 @@ internal class AuthenticationFilterTest {
         context.response = response
         RequestContext.testSetCurrentContext(context)
 
-        verifier = mock()
+        keyVerifier = mock()
+        subjectVerifier = mock()
+        logger = mock()
 
-        filter = AuthenticationFilter(verifier)
+        filter = AuthenticationFilter(keyVerifier, subjectVerifier, logger)
     }
 
     @Test
@@ -70,10 +76,25 @@ internal class AuthenticationFilterTest {
     fun `invalid token`() {
         doReturn("Bearer xxx").whenever(request).getHeader("Authorization")
 
-        doThrow(RuntimeException::class).whenever(verifier).verify("xxx")
+        val ex = RuntimeException()
+        doThrow(ex).whenever(keyVerifier).verify("xxx")
 
         filter.run()
 
         assertEquals(401, context.responseStatusCode)
+        verify(logger).setException(ex)
+    }
+
+    @Test
+    fun `invalid subject`() {
+        doReturn("Bearer xxx").whenever(request).getHeader("Authorization")
+
+        val ex = RuntimeException()
+        doThrow(ex).whenever(subjectVerifier).verify("xxx")
+
+        filter.run()
+
+        assertEquals(401, context.responseStatusCode)
+        verify(logger).setException(ex)
     }
 }

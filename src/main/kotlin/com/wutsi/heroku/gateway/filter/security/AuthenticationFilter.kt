@@ -2,7 +2,7 @@ package com.wutsi.heroku.gateway.filter.security
 
 import com.netflix.zuul.ZuulFilter
 import com.netflix.zuul.context.RequestContext
-import org.slf4j.LoggerFactory
+import com.wutsi.platform.core.logging.KVLogger
 import org.springframework.stereotype.Service
 
 /**
@@ -11,11 +11,11 @@ import org.springframework.stereotype.Service
  * - The owner of the token is still active
  */
 @Service
-class AuthenticationFilter(private val keyVerifier: KeyVerifier) : ZuulFilter() {
-    companion object {
-        private val LOGGER = LoggerFactory.getLogger(AuthenticationFilter::class.java)
-    }
-
+class AuthenticationFilter(
+    private val keyVerifier: KeyVerifier,
+    private val subjectVerifier: SubjectVerifier,
+    private val logger: KVLogger
+) : ZuulFilter() {
     override fun shouldFilter(): Boolean =
         getToken() != null
 
@@ -24,15 +24,38 @@ class AuthenticationFilter(private val keyVerifier: KeyVerifier) : ZuulFilter() 
     override fun filterOrder(): Int = 0
 
     override fun run(): Any? {
-        try {
-            keyVerifier.verify(getToken()!!)
-            LOGGER.info("Token is valid")
-        } catch (ex: Exception) {
-            LOGGER.error("Authentication failure", ex)
+        val token = getToken()!!
+        if (!verifyToken(token) || !verifySubject(token)) {
             RequestContext.getCurrentContext().responseStatusCode = 401
         }
 
+        // Verify subject
         return null
+    }
+
+    private fun verifyToken(token: String): Boolean {
+        try {
+            keyVerifier.verify(token)
+            logger.add("token_valid", true)
+
+            return true
+        } catch (ex: Exception) {
+            logger.setException(ex)
+            logger.add("token_valid", false)
+            return false
+        }
+    }
+
+    private fun verifySubject(token: String): Boolean {
+        try {
+            subjectVerifier.verify(token)
+            logger.add("subject_valid", true)
+            return true
+        } catch (ex: Exception) {
+            logger.setException(ex)
+            logger.add("subject_valid", false)
+            return false
+        }
     }
 
     private fun getToken(): String? {
