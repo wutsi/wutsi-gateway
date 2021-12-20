@@ -33,29 +33,36 @@ spring:
 wutsi:
   application:
     name: wutsi-gateway
-  bff:
-    onboard: https://wutsi-onboard-bff-test.herokuapp.com
-    cash: https://wutsi-cash-bff-test.herokuapp.com
-    login: https://wutsi-login-bff-test.herokuapp.com
-    shell: https://wutsi-shell-bff-test.herokuapp.com
+    onboard-url: https://wutsi-onboard-bff-test.herokuapp.com
+    cash-url: https://wutsi-cash-bff-test.herokuapp.com
+    login-url: https://wutsi-login-bff-test.herokuapp.com
+    shell-url: https://wutsi-shell-bff-test.herokuapp.com
+  platform:
+    cache:
+      type: local
+      name: ${wutsi.application.name}
+    security:
+      type: none
+    tracing:
+      client-id: ${wutsi.application.name}
 
 zuul:
   routes:
     onboard:
       path: /onboard/**
-      url: ${wutsi.bff.onboard}
+      url: ${wutsi.application.onboard-url}
       sensitiveHeaders:
     login:
       path: /login/**
-      url: ${wutsi.bff.login}
+      url: ${wutsi.application.login-url}
       sensitiveHeaders:
     shell:
       path: /shell/**
-      url: ${wutsi.bff.shell}
+      url: ${wutsi.application.shell-url}
       sensitiveHeaders:
     cash:
       path: /cash/**
-      url: ${wutsi.bff.cash}
+      url: ${wutsi.application.cash-url}
       sensitiveHeaders:
 
 logging:

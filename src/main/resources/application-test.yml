@@ -1,9 +1,5 @@
 wutsi:
   platform:
-    stream:
-      type: rabbitmq
-      rabbitmq:
-        url: ${CLOUDAMQP_URL}
     cache:
       type: memcached
       memcached:
