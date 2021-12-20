@@ -1,0 +1,38 @@
+openapi: 3.0.0
+info:
+  title: Wutsi Server Launcher
+  description: |
+    Utility for start free Herokus server based on Event that occurs on the platform.
+    For exemple:
+    - When a story is published, `newsletter`, `twitter`, `linkedin`, `telegram` servers are started
+    - When email a is sent, `email` server is started.
+    This utility help optimize the usage of our 1000 heroku free monthly hours
+  version: 1.0.0
+servers:
+  - url: 'https://wutsi-launcher-test.herokuapp.com'
+    description: Sandbox
+  - url: 'https://wutsi-launcher-prod.herokuapp.com'
+    description: Production
+paths:
+  /v1/servers/up:
+    get:
+      operationId: up
+      summary: Launch Servers
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpResponse'
+      tags:
+        - Story
+components:
+  schemas:
+    UpResponse:
+      type: object
+      properties:
+        time:
+          description: Launch time
+          type: number
+          format: int64
