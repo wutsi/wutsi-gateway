@@ -16,15 +16,15 @@ open class SubjectVerifier(
 ) {
     fun verify(key: String) {
         val jwt = JWT.decode(key)
-        val type = jwt.claims[JWTBuilder.CLAIM_SUBJECT_TYPE]
+        val type = jwt.claims[JWTBuilder.CLAIM_SUBJECT_TYPE]?.asString()
         val subject = jwt.subject
 
         logger.add("subject", subject)
         logger.add("subject_type", type)
 
-        if (SubjectType.APPLICATION.name.equals(type?.asString(), true)) {
+        if (SubjectType.APPLICATION.name.equals(type, true)) {
             validateApplication(subject.toLong())
-        } else if (SubjectType.USER.name.equals(type?.asString(), true)) {
+        } else if (SubjectType.USER.name.equals(type, true)) {
             validateAccount(subject.toLong())
         } else
             throw IllegalStateException("Invalid subject_type: $type")

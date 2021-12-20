@@ -6,4 +6,7 @@ wutsi:
         username: ${MEMCACHIER_USERNAME}
         password: ${MEMCACHIER_PASSWORD}
         servers: ${MEMCACHIER_SERVERS}
-        ttl: 1800  # 30 min
+    stream:
+      type: rabbitmq
+      rabbitmq:
+        url: ${CLOUDAMQP_URL}
