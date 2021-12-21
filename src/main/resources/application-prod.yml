@@ -1,4 +1,9 @@
 wutsi:
+  application:
+    onboard-url: https://wutsi-onboard-bff-prod.herokuapp.com
+    cash-url: https://wutsi-cash-bff-prod.herokuapp.com
+    login-url: https://wutsi-login-bff-prod.herokuapp.com
+    shell-url: https://wutsi-shell-bff-prod.herokuapp.com
   platform:
     cache:
       type: memcached
