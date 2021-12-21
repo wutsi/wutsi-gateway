@@ -58,7 +58,7 @@ zuul:
   routes:
     onboard:
       path: /onboard/**
-      url: ${wutsi.application.onboard-url}
+      url: ${wutsi.application.login-url}/onboard
       sensitiveHeaders:
     login:
       path: /login/**
