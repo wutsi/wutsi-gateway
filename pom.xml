@@ -26,15 +26,14 @@
 
     <java-jwt.version>3.18.2</java-jwt.version>
     <javax-validation.version>2.0.1.Final</javax-validation.version>
-    <!--    <junit.version>5.6.0</junit.version>-->
     <kotlin.version>1.6.0</kotlin.version>
     <kotlin-mockito.version>2.2.0</kotlin-mockito.version>
     <klint.version>0.43.1</klint.version>
     <maven-antrun-plugin.version>3.0.0</maven-antrun-plugin.version>
     <spring-cloud.version>Hoxton.SR9</spring-cloud.version>
-    <wutsi-platform-core.version>0.0.81</wutsi-platform-core.version>
+    <wutsi-platform-core.version>0.0.87</wutsi-platform-core.version>
     <wutsi-security.version>0.0.13</wutsi-security.version>
-    <wutsi-account.version>1.0.22</wutsi-account.version>
+    <wutsi-account.version>1.0.23</wutsi-account.version>
   </properties>
 
   <dependencies>

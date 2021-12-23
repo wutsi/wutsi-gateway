@@ -1,6 +1,5 @@
 package com.wutsi.heroku.gateway.filter.security
 
-import com.netflix.zuul.ZuulFilter
 import com.netflix.zuul.context.RequestContext
 import com.wutsi.platform.core.logging.KVLogger
 import org.springframework.stereotype.Service
@@ -15,14 +14,7 @@ class AuthenticationFilter(
     private val keyVerifier: KeyVerifier,
     private val subjectVerifier: SubjectVerifier,
     private val logger: KVLogger
-) : ZuulFilter() {
-    override fun shouldFilter(): Boolean =
-        getToken() != null
-
-    override fun filterType(): String = "pre"
-
-    override fun filterOrder(): Int = 0
-
+) : AbstractSecurityFilter() {
     override fun run(): Any? {
         val token = getToken()!!
         if (!verifyToken(token) || !verifySubject(token)) {
@@ -56,14 +48,5 @@ class AuthenticationFilter(
             logger.add("subject_valid", false)
             return false
         }
-    }
-
-    private fun getToken(): String? {
-        val request = RequestContext.getCurrentContext().request
-        val value = request.getHeader("Authorization") ?: return null
-        return if (value.startsWith("Bearer ", ignoreCase = true))
-            value.substring(7)
-        else
-            null
     }
 }
