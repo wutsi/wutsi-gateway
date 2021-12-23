@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.heroku.gateway.api.WutsiAccountApiCacheAware
 import com.wutsi.platform.account.WutsiAccountApi
 import com.wutsi.platform.account.WutsiAccountApiBuilder
-import com.wutsi.platform.core.security.feign.FeignApiKeyRequestInterceptor
 import com.wutsi.platform.core.security.feign.FeignAuthorizationRequestInterceptor
 import com.wutsi.platform.core.tracing.feign.FeignTracingRequestInterceptor
 import org.springframework.cache.Cache
@@ -17,7 +16,6 @@ import org.springframework.core.env.Profiles
 public class AccountApiConfiguration(
     private val authorizationRequestInterceptor: FeignAuthorizationRequestInterceptor,
     private val tracingRequestInterceptor: FeignTracingRequestInterceptor,
-    private val apiKeyRequestInterceptor: FeignApiKeyRequestInterceptor,
     private val mapper: ObjectMapper,
     private val env: Environment,
     private val cache: Cache,
@@ -30,7 +28,6 @@ public class AccountApiConfiguration(
             env = environment(),
             mapper = mapper,
             interceptors = listOf(
-                apiKeyRequestInterceptor,
                 tracingRequestInterceptor,
                 authorizationRequestInterceptor
             )

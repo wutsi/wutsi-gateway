@@ -47,16 +47,6 @@ internal class WutsiSecurityApiCacheAwareTest {
     }
 
     @Test
-    fun application() {
-        val result = GetApplicationResponse()
-        doReturn(result).whenever(delegate).application("xxx")
-
-        val response = api.application("xxx")
-
-        assertEquals(result, response)
-    }
-
-    @Test
     fun createApplication() {
         val request = CreateApplicationRequest()
         val result = CreateApplicationResponse()

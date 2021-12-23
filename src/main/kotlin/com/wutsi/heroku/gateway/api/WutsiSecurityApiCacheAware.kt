@@ -27,9 +27,6 @@ class WutsiSecurityApiCacheAware(
     override fun authenticate(request: AuthenticationRequest): AuthenticationResponse =
         delegate.authenticate(request)
 
-    override fun application(xApiKey: String): GetApplicationResponse =
-        delegate.application(xApiKey)
-
     override fun createApplication(request: CreateApplicationRequest): CreateApplicationResponse =
         delegate.createApplication(request)
 

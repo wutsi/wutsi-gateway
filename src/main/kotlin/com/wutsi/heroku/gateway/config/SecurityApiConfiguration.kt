@@ -2,7 +2,6 @@ package com.wutsi.heroku.gateway.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.heroku.gateway.api.WutsiSecurityApiCacheAware
-import com.wutsi.platform.core.security.feign.FeignApiKeyRequestInterceptor
 import com.wutsi.platform.core.tracing.feign.FeignTracingRequestInterceptor
 import com.wutsi.platform.security.WutsiSecurityApi
 import com.wutsi.platform.security.WutsiSecurityApiBuilder
@@ -15,7 +14,6 @@ import org.springframework.core.env.Profiles
 @Configuration
 public class SecurityApiConfiguration(
     private val tracingRequestInterceptor: FeignTracingRequestInterceptor,
-    private val apiKeyRequestInterceptor: FeignApiKeyRequestInterceptor,
     private val mapper: ObjectMapper,
     private val env: Environment,
     private val cache: Cache,
@@ -27,7 +25,6 @@ public class SecurityApiConfiguration(
             env = environment(),
             mapper = mapper,
             interceptors = listOf(
-                apiKeyRequestInterceptor,
                 tracingRequestInterceptor,
             )
         )
