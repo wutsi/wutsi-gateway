@@ -31,7 +31,7 @@
     <klint.version>0.43.2</klint.version>
     <maven-antrun-plugin.version>3.0.0</maven-antrun-plugin.version>
     <spring-cloud.version>Hoxton.SR9</spring-cloud.version>
-    <wutsi-platform-core.version>0.0.90</wutsi-platform-core.version>
+    <wutsi-platform-core.version>0.0.91</wutsi-platform-core.version>
     <wutsi-security.version>0.0.14</wutsi-security.version>
     <wutsi-account.version>1.0.23</wutsi-account.version>
   </properties>
