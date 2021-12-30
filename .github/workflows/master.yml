@@ -28,23 +28,23 @@ jobs:
           curl https://cli-assets.heroku.com/install.sh | sh
           heroku plugins:install @heroku-cli/plugin-java
 
-      #      - name: Heroku-Deploy-Test
-      #        env:
-      #          HEROKU_API_KEY: ${{secrets.HEROKU_API_KEY_TEST}}
-      #          HEROKU_APP: wutsi-gateway-test
-      #          CLOUDAMQP_URL: ${{secrets.CLOUDAMQP_URL_TEST}}
-      #        run: |
-      #          heroku apps | grep ${HEROKU_APP} && echo 'app: ${HEROKU_APP} exists' ||  heroku apps:create ${HEROKU_APP}
-      #          heroku buildpacks:clear --app ${HEROKU_APP}
-      #          heroku buildpacks:add heroku/jvm --app ${HEROKU_APP}
-      #          heroku config:set --app ${HEROKU_APP} APP_PROFILE=test
-      #          heroku config:set --app ${HEROKU_APP} CLOUDAMQP_URL=${CLOUDAMQP_URL}
-      #          heroku addons -a ${HEROKU_APP} | grep papertrail && echo 'addon: papertrail exists' ||  heroku addons:create papertrail -a ${HEROKU_APP}
-      #          heroku addons -a ${HEROKU_APP} | grep memcachier && echo 'addon: memcachier exists' ||  heroku addons:create memcachier -a ${HEROKU_APP}
-      #          heroku deploy:jar target/wutsi-gateway.jar --app ${HEROKU_APP}
-      #          echo Health check....
-      #          sleep 90
-      #          curl -sSf https://${HEROKU_APP}.herokuapp.com/actuator/health >> /dev/null
+      - name: Heroku-Deploy-Test
+        env:
+          HEROKU_API_KEY: ${{secrets.HEROKU_API_KEY_TEST}}
+          HEROKU_APP: wutsi-gateway-test
+          CLOUDAMQP_URL: ${{secrets.CLOUDAMQP_URL_TEST}}
+        run: |
+          heroku apps | grep ${HEROKU_APP} && echo 'app: ${HEROKU_APP} exists' ||  heroku apps:create ${HEROKU_APP}
+          heroku buildpacks:clear --app ${HEROKU_APP}
+          heroku buildpacks:add heroku/jvm --app ${HEROKU_APP}
+          heroku config:set --app ${HEROKU_APP} APP_PROFILE=test
+          heroku config:set --app ${HEROKU_APP} CLOUDAMQP_URL=${CLOUDAMQP_URL}
+          heroku addons -a ${HEROKU_APP} | grep papertrail && echo 'addon: papertrail exists' ||  heroku addons:create papertrail -a ${HEROKU_APP}
+          heroku addons -a ${HEROKU_APP} | grep memcachier && echo 'addon: memcachier exists' ||  heroku addons:create memcachier -a ${HEROKU_APP}
+          heroku deploy:jar target/wutsi-gateway.jar --app ${HEROKU_APP}
+          echo Health check....
+          sleep 90
+          curl -sSf https://${HEROKU_APP}.herokuapp.com/actuator/health >> /dev/null
 
       - name: Heroku-Deploy-Prod
         env:
