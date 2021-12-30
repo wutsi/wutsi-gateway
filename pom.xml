@@ -15,7 +15,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.6.2</version>
+    <version>2.3.7.RELEASE</version>
   </parent>
 
   <properties>
@@ -31,7 +31,6 @@
     <klint.version>0.43.2</klint.version>
     <maven-antrun-plugin.version>3.0.0</maven-antrun-plugin.version>
     <spring-cloud.version>2021.0.0</spring-cloud.version>
-    <spring-cloud-netflix-zuul.version>2.2.9.RELEASE</spring-cloud-netflix-zuul.version>
     <wutsi-platform-core.version>0.0.91</wutsi-platform-core.version>
     <wutsi-security.version>0.0.15</wutsi-security.version>
     <wutsi-account.version>1.0.24</wutsi-account.version>
@@ -67,8 +66,7 @@
 
     <dependency>
       <groupId>org.springframework.cloud</groupId>
-      <artifactId>spring-cloud-starter-netflix-zuul</artifactId>
-      <version>${spring-cloud-netflix-zuul.version}</version>
+      <artifactId>spring-cloud-starter-netflix</artifactId>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
