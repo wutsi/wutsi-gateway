@@ -1,6 +1,9 @@
 package com.wutsi.heroku.gateway.filter.security
 
 import com.netflix.zuul.context.RequestContext
+import com.wutsi.heroku.gateway.error.ErrorURN
+import com.wutsi.platform.core.error.Error
+import com.wutsi.platform.core.error.exception.ForbiddenException
 import com.wutsi.platform.core.tracing.TracingContext
 import org.springframework.stereotype.Service
 
@@ -9,17 +12,31 @@ import org.springframework.stereotype.Service
  */
 @Service
 class TenantFilter(
-    private val tenantExtractor: TenantExtractor
+    private val tenantExtractor: TenantExtractor,
+    private val tracingContext: TracingContext
 ) : AbstractSecurityFilter() {
+    override fun shouldFilter(): Boolean =
+        true
+
     override fun run(): Any? {
         val token = getToken()
-            ?: return null
+        var tenantId: Any?
 
-        val tenantId = tenantExtractor.extractTenantId(token)
-        if (tenantId != null) {
+        if (token == null)
+            tenantId = tracingContext.tenantId()
+        else
+            tenantId = tenantExtractor.extractTenantId(token)
+
+        if (tenantId == null)
+            throw ForbiddenException(
+                error = Error(
+                    code = ErrorURN.MISSING_TENANT.urn
+                )
+            )
+        else
             RequestContext.getCurrentContext()
                 .addZuulRequestHeader(TracingContext.HEADER_TENANT_ID, tenantId.toString())
-        }
+
         return null
     }
 }
