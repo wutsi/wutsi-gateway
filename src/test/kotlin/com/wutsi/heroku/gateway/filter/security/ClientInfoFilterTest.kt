@@ -3,16 +3,15 @@ package com.wutsi.heroku.gateway.filter.security
 import com.netflix.zuul.context.RequestContext
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.platform.core.logging.KVLogger
-import com.wutsi.platform.core.tracing.TracingContext
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
-import kotlin.test.assertNull
 
 internal class ClientInfoFilterTest {
     private lateinit var filter: ClientInfoFilter
@@ -52,22 +51,15 @@ internal class ClientInfoFilterTest {
     }
 
     @Test
-    fun `app info available`() {
-        doReturn("0.0.1").whenever(request).getHeader("X-App-Version")
-        doReturn("20").whenever(request).getHeader("X-App-Build-Number")
-        doReturn("foo").whenever(request).getHeader(TracingContext.HEADER_CLIENT_ID)
+    fun `log app info`() {
+        doReturn("Android").whenever(request).getHeader("X-OS")
+        doReturn("10").whenever(request).getHeader("X-OS-Version")
+        doReturn("0.0.1.20").whenever(request).getHeader("X-Client-Version")
 
         filter.run()
 
-        assertEquals("foo.0.0.1.20", context.zuulRequestHeaders["X-Client-Info"])
-    }
-
-    @Test
-    fun `app info not available`() {
-        doReturn("foo").whenever(request).getHeader(TracingContext.HEADER_CLIENT_ID)
-
-        filter.run()
-
-        assertNull(context.zuulRequestHeaders["X-Client-Info"])
+        verify(logger).add("client_version", "0.0.1.20")
+        verify(logger).add("client_os", "Android")
+        verify(logger).add("client_os_version", "10")
     }
 }
