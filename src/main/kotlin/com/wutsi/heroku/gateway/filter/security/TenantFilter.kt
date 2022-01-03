@@ -12,7 +12,9 @@ class TenantFilter(
     private val tenantExtractor: TenantExtractor
 ) : AbstractSecurityFilter() {
     override fun run(): Any? {
-        val token = getToken()!!
+        val token = getToken()
+            ?: return null
+
         val tenantId = tenantExtractor.extractTenantId(token)
         if (tenantId != null) {
             RequestContext.getCurrentContext()
