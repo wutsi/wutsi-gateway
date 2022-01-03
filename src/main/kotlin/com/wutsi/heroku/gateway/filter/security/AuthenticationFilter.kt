@@ -15,6 +15,9 @@ class AuthenticationFilter(
     private val subjectVerifier: SubjectVerifier,
     private val logger: KVLogger
 ) : AbstractSecurityFilter() {
+    override fun shouldFilter(): Boolean =
+        isNotLogin() && super.shouldFilter()
+
     override fun run(): Any? {
         val token = getToken()!!
         if (!verifyToken(token) || !verifySubject(token)) {
@@ -24,6 +27,9 @@ class AuthenticationFilter(
         // Verify subject
         return null
     }
+
+    private fun isNotLogin(): Boolean =
+        !RequestContext.getCurrentContext().request.requestURI.startsWith("/login")
 
     private fun verifyToken(token: String): Boolean {
         try {

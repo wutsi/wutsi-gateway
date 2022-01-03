@@ -27,6 +27,8 @@ internal class AuthenticationFilterTest {
     @BeforeEach
     fun setUp() {
         request = mock()
+        doReturn("/foo/bar").whenever(request).requestURI
+
         response = mock()
 
         context = RequestContext()
@@ -50,6 +52,12 @@ internal class AuthenticationFilterTest {
     @Test
     fun `should not filter when Authorization header is not available`() {
         doReturn(null).whenever(request).getHeader("Authorization")
+        assertFalse(filter.shouldFilter())
+    }
+
+    @Test
+    fun `should not filter login request`() {
+        doReturn("/login/x/y/z").whenever(request).requestURI
         assertFalse(filter.shouldFilter())
     }
 
