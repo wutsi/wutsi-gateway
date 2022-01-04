@@ -20,12 +20,8 @@ class TenantFilter(
 
     override fun run(): Any? {
         val token = getToken()
-        var tenantId: Any?
-
-        if (token == null)
-            tenantId = tracingContext.tenantId()
-        else
-            tenantId = tenantExtractor.extractTenantId(token)
+        val tenantId: Any? = token?.let { tenantExtractor.extractTenantId(it) }
+            ?: tracingContext.tenantId()
 
         if (tenantId == null)
             throw ForbiddenException(
