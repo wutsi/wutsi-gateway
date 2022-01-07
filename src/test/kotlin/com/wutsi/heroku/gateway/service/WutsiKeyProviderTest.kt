@@ -1,4 +1,4 @@
-package com.wutsi.heroku.gateway.filter.security
+package com.wutsi.heroku.gateway.service
 
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock

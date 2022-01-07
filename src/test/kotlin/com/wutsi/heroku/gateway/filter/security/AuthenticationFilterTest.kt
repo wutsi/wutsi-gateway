@@ -6,6 +6,8 @@ import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
+import com.wutsi.heroku.gateway.service.KeyVerifier
+import com.wutsi.heroku.gateway.service.SubjectVerifier
 import com.wutsi.platform.core.logging.KVLogger
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach

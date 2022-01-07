@@ -7,13 +7,16 @@ import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.heroku.gateway.error.ErrorURN
+import com.wutsi.heroku.gateway.service.TenantExtractor
 import com.wutsi.platform.core.error.exception.ForbiddenException
 import com.wutsi.platform.core.tracing.TracingContext
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import javax.servlet.http.HttpServletRequest
+import kotlin.test.assertFalse
 
 internal class TenantFilterTest {
     private lateinit var tenantExtractor: TenantExtractor
@@ -32,6 +35,24 @@ internal class TenantFilterTest {
         context = mock()
         doReturn(request).whenever(context).request
         RequestContext.testSetCurrentContext(context)
+    }
+
+    @Test
+    fun shouldFilterPOST() {
+        doReturn("POST").whenever(request).method
+        assertTrue(filter.shouldFilter())
+    }
+
+    @Test
+    fun shouldFilterGET() {
+        doReturn("GET").whenever(request).method
+        assertFalse(filter.shouldFilter())
+    }
+
+    @Test
+    fun shouldFilterOPTION() {
+        doReturn("OPTION").whenever(request).method
+        assertFalse(filter.shouldFilter())
     }
 
     @Test

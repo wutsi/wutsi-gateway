@@ -2,6 +2,7 @@ package com.wutsi.heroku.gateway.filter.security
 
 import com.netflix.zuul.context.RequestContext
 import com.wutsi.heroku.gateway.error.ErrorURN
+import com.wutsi.heroku.gateway.service.TenantExtractor
 import com.wutsi.platform.core.error.Error
 import com.wutsi.platform.core.error.exception.ForbiddenException
 import com.wutsi.platform.core.tracing.TracingContext
@@ -16,7 +17,7 @@ class TenantFilter(
     private val tracingContext: TracingContext
 ) : AbstractSecurityFilter() {
     override fun shouldFilter(): Boolean =
-        true
+        RequestContext.getCurrentContext().request.method == "POST"
 
     override fun run(): Any? {
         val token = getToken()

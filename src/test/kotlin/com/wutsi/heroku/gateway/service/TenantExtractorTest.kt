@@ -1,4 +1,4 @@
-package com.wutsi.heroku.gateway.filter.security
+package com.wutsi.heroku.gateway.service
 
 import com.wutsi.platform.core.security.SubjectType
 import com.wutsi.platform.core.security.spring.jwt.JWTBuilder

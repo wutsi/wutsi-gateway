@@ -1,4 +1,4 @@
-package com.wutsi.heroku.gateway.filter.security
+package com.wutsi.heroku.gateway.service
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm

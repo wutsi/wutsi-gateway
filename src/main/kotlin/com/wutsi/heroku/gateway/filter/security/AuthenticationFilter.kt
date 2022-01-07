@@ -1,6 +1,8 @@
 package com.wutsi.heroku.gateway.filter.security
 
 import com.netflix.zuul.context.RequestContext
+import com.wutsi.heroku.gateway.service.KeyVerifier
+import com.wutsi.heroku.gateway.service.SubjectVerifier
 import com.wutsi.platform.core.logging.KVLogger
 import org.springframework.stereotype.Service
 
