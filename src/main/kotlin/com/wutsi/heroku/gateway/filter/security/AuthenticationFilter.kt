@@ -1,9 +1,12 @@
 package com.wutsi.heroku.gateway.filter.security
 
 import com.netflix.zuul.context.RequestContext
+import com.netflix.zuul.exception.ZuulException
 import com.wutsi.heroku.gateway.service.KeyVerifier
 import com.wutsi.heroku.gateway.service.SubjectVerifier
 import com.wutsi.platform.core.logging.KVLogger
+import org.springframework.cloud.netflix.zuul.util.ZuulRuntimeException
+import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 
 /**
@@ -22,11 +25,16 @@ class AuthenticationFilter(
 
     override fun run(): Any? {
         val token = getToken()!!
-        if (!verifyToken(token) || !verifySubject(token)) {
-            RequestContext.getCurrentContext().responseStatusCode = 401
+        try {
+            verifyToken(token)
+            verifySubject(token)
+        } catch (ex: Exception) {
+            throw ZuulRuntimeException(
+                ZuulException(
+                    "Token not valid", HttpStatus.UNAUTHORIZED.value(), ex.message
+                )
+            )
         }
-
-        // Verify subject
         return null
     }
 
@@ -34,27 +42,14 @@ class AuthenticationFilter(
         !RequestContext.getCurrentContext().request.requestURI.startsWith("/login")
 
     private fun verifyToken(token: String): Boolean {
-        try {
-            keyVerifier.verify(token)
-            logger.add("token_valid", true)
-
-            return true
-        } catch (ex: Exception) {
-            logger.setException(ex)
-            logger.add("token_valid", false)
-            return false
-        }
+        keyVerifier.verify(token)
+        logger.add("token_valid", true)
+        return true
     }
 
     private fun verifySubject(token: String): Boolean {
-        try {
-            subjectVerifier.verify(token)
-            logger.add("subject_valid", true)
-            return true
-        } catch (ex: Exception) {
-            logger.setException(ex)
-            logger.add("subject_valid", false)
-            return false
-        }
+        subjectVerifier.verify(token)
+        logger.add("subject_valid", true)
+        return true
     }
 }

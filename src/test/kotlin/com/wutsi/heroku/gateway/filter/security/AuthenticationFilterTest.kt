@@ -1,10 +1,11 @@
 package com.wutsi.heroku.gateway.filter.security
 
 import com.netflix.zuul.context.RequestContext
+import com.netflix.zuul.exception.ZuulException
+import com.netflix.zuul.monitoring.CounterFactory
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.heroku.gateway.service.KeyVerifier
 import com.wutsi.heroku.gateway.service.SubjectVerifier
@@ -12,10 +13,14 @@ import com.wutsi.platform.core.logging.KVLogger
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
+import org.springframework.cloud.netflix.zuul.metrics.EmptyCounterFactory
+import org.springframework.cloud.netflix.zuul.util.ZuulRuntimeException
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertIs
 
 internal class AuthenticationFilterTest {
     private lateinit var filter: AuthenticationFilter
@@ -43,6 +48,8 @@ internal class AuthenticationFilterTest {
         logger = mock()
 
         filter = AuthenticationFilter(keyVerifier, subjectVerifier, logger)
+
+        CounterFactory.initialize(EmptyCounterFactory())
     }
 
     @Test
@@ -86,25 +93,27 @@ internal class AuthenticationFilterTest {
     fun `invalid token`() {
         doReturn("Bearer xxx").whenever(request).getHeader("Authorization")
 
-        val ex = RuntimeException()
-        doThrow(ex).whenever(keyVerifier).verify("xxx")
+        doThrow(RuntimeException::class).whenever(keyVerifier).verify("xxx")
 
-        filter.run()
+        val ex = assertThrows<ZuulRuntimeException> {
+            filter.run()
+        }
 
-        assertEquals(401, context.responseStatusCode)
-        verify(logger).setException(ex)
+        assertIs<ZuulException>(ex.cause)
+        assertEquals(401, (ex.cause as ZuulException).nStatusCode)
     }
 
     @Test
     fun `invalid subject`() {
         doReturn("Bearer xxx").whenever(request).getHeader("Authorization")
 
-        val ex = RuntimeException()
-        doThrow(ex).whenever(subjectVerifier).verify("xxx")
+        doThrow(RuntimeException::class).whenever(subjectVerifier).verify("xxx")
 
-        filter.run()
+        val ex = assertThrows<ZuulRuntimeException> {
+            filter.run()
+        }
 
-        assertEquals(401, context.responseStatusCode)
-        verify(logger).setException(ex)
+        assertIs<ZuulException>(ex.cause)
+        assertEquals(401, (ex.cause as ZuulException).nStatusCode)
     }
 }

@@ -43,6 +43,8 @@ wutsi:
       name: ${wutsi.application.name}
     security:
       type: none
+      cors:
+        enabled: false  # Inherits CORS configuration from downstreams
     stream:
       name: ${wutsi.application.name}
       type: local
