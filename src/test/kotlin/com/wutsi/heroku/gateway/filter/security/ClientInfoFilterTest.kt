@@ -6,6 +6,7 @@ import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import com.wutsi.platform.core.logging.KVLogger
+import com.wutsi.platform.core.tracing.TracingContext
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
@@ -25,9 +26,9 @@ internal class ClientInfoFilterTest {
         request = mock()
         response = mock()
 
-        context = RequestContext()
-        context.request = request
-        context.response = response
+        context = mock()
+        doReturn(request).whenever(context).request
+        doReturn(response).whenever(context).response
         RequestContext.testSetCurrentContext(context)
 
         logger = mock()
@@ -52,6 +53,7 @@ internal class ClientInfoFilterTest {
 
     @Test
     fun `log app info`() {
+        doReturn("foo").whenever(request).getHeader(TracingContext.HEADER_CLIENT_ID)
         doReturn("Android").whenever(request).getHeader("X-OS")
         doReturn("10").whenever(request).getHeader("X-OS-Version")
         doReturn("0.0.1.20").whenever(request).getHeader("X-Client-Version")
@@ -61,5 +63,8 @@ internal class ClientInfoFilterTest {
         verify(logger).add("client_version", "0.0.1.20")
         verify(logger).add("client_os", "Android")
         verify(logger).add("client_os_version", "10")
+        verify(logger).add("client_info", "foo-0.0.1.20-android")
+
+        verify(context).addZuulRequestHeader(TracingContext.HEADER_CLIENT_INFO, "foo-0.0.1.20-android")
     }
 }
