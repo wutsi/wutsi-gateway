@@ -29,6 +29,7 @@ class AuthenticationFilter(
             verifyToken(token)
             verifySubject(token)
         } catch (ex: Exception) {
+            logger.setException(ex)
             throw ZuulRuntimeException(
                 ZuulException(
                     "Token not valid", HttpStatus.UNAUTHORIZED.value(), ex.message
