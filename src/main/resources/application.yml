@@ -35,9 +35,9 @@ wutsi:
     name: wutsi-gateway
     onboard-url: https://wutsi-onboard-bff-test.herokuapp.com
     cash-url: https://wutsi-cash-bff-test.herokuapp.com
-    catalog-url: https://wutsi-catalog-bff-test.herokuapp.com
     login-url: https://wutsi-login-bff-test.herokuapp.com
     shell-url: https://wutsi-shell-bff-test.herokuapp.com
+    store-url: https://wutsi-store-bff-test.herokuapp.com
   platform:
     cache:
       type: local
@@ -63,10 +63,6 @@ zuul:
       path: /cash/**
       url: ${wutsi.application.cash-url}
       sensitiveHeaders:
-    catalog:
-      path: /catalog/**
-      url: ${wutsi.application.catalog-url}
-      sensitiveHeaders:
     login:
       path: /login/**
       url: ${wutsi.application.login-url}
@@ -78,6 +74,10 @@ zuul:
     shell:
       path: /shell/**
       url: ${wutsi.application.shell-url}
+      sensitiveHeaders:
+    store:
+      path: /store/**
+      url: ${wutsi.application.store-url}
       sensitiveHeaders:
 
 logging:
