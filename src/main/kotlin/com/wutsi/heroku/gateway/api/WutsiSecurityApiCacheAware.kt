@@ -36,6 +36,10 @@ class WutsiSecurityApiCacheAware(
     override fun createScope(request: CreateScopeRequest): CreateScopeResponse =
         delegate.createScope(request)
 
+    override fun logout() {
+        delegate.logout()
+    }
+
     override fun getApplication(id: Long): GetApplicationResponse {
         val key = getApplicationCacheKey(id)
         val cached = getFromCache(key, GetApplicationResponse::class.java)
