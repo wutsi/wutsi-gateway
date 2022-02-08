@@ -8,7 +8,9 @@ import com.wutsi.platform.account.dto.CreateAccountRequest
 import com.wutsi.platform.account.dto.CreateAccountResponse
 import com.wutsi.platform.account.dto.GetAccountResponse
 import com.wutsi.platform.account.dto.GetPaymentMethodResponse
+import com.wutsi.platform.account.dto.ListBusinessHourResponse
 import com.wutsi.platform.account.dto.ListPaymentMethodResponse
+import com.wutsi.platform.account.dto.SaveBusinessHourRequest
 import com.wutsi.platform.account.dto.SavePasswordRequest
 import com.wutsi.platform.account.dto.SearchAccountRequest
 import com.wutsi.platform.account.dto.SearchAccountResponse
@@ -100,6 +102,13 @@ class WutsiAccountApiCacheAware(
 
     override fun updatePaymentMethod(id: Long, token: String, request: UpdatePaymentMethodRequest) =
         delegate.updatePaymentMethod(id, token, request)
+
+    override fun listBusinessHours(id: Long): ListBusinessHourResponse =
+        delegate.listBusinessHours(id)
+
+    override fun saveBusinessHour(id: Long, request: SaveBusinessHourRequest) {
+        delegate.saveBusinessHour(id, request)
+    }
 
     private fun getFromCache(key: String): GetAccountResponse? =
         try {
