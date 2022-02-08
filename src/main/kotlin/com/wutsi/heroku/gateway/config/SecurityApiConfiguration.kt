@@ -3,6 +3,7 @@ package com.wutsi.heroku.gateway.config
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.wutsi.heroku.gateway.api.WutsiSecurityApiCacheAware
 import com.wutsi.platform.core.tracing.feign.FeignTracingRequestInterceptor
+import com.wutsi.platform.core.util.feign.Custom5XXErrorDecoder
 import com.wutsi.platform.security.WutsiSecurityApi
 import com.wutsi.platform.security.WutsiSecurityApiBuilder
 import org.springframework.cache.Cache
@@ -26,7 +27,8 @@ public class SecurityApiConfiguration(
             mapper = mapper,
             interceptors = listOf(
                 tracingRequestInterceptor,
-            )
+            ),
+            errorDecoder = Custom5XXErrorDecoder()
         )
     )
 
