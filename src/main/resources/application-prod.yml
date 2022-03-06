@@ -5,6 +5,7 @@ wutsi:
     catalog-url: https://wutsi-catalog-bff-prod.herokuapp.com
     login-url: https://wutsi-login-bff-prod.herokuapp.com
     shell-url: https://wutsi-shell-bff-prod.herokuapp.com
+    store-url: https://wutsi-store-bff-prod.herokuapp.com
   platform:
     cache:
       type: memcached
