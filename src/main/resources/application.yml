@@ -44,6 +44,7 @@ wutsi:
       name: ${wutsi.application.name}
     security:
       type: none
+      api-key: "ddb48c94-e3f7-11ec-b030-127037cd15a7"
       cors:
         enabled: false  # Inherits CORS configuration from downstreams
     stream:

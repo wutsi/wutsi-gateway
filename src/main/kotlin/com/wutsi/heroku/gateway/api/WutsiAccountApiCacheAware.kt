@@ -7,8 +7,10 @@ import com.wutsi.platform.account.dto.AddPaymentMethodResponse
 import com.wutsi.platform.account.dto.CreateAccountRequest
 import com.wutsi.platform.account.dto.CreateAccountResponse
 import com.wutsi.platform.account.dto.GetAccountResponse
+import com.wutsi.platform.account.dto.GetCategoryResponse
 import com.wutsi.platform.account.dto.GetPaymentMethodResponse
 import com.wutsi.platform.account.dto.ListBusinessHourResponse
+import com.wutsi.platform.account.dto.ListCategoryResponse
 import com.wutsi.platform.account.dto.ListPaymentMethodResponse
 import com.wutsi.platform.account.dto.SaveBusinessHourRequest
 import com.wutsi.platform.account.dto.SavePasswordRequest
@@ -109,6 +111,12 @@ class WutsiAccountApiCacheAware(
     override fun saveBusinessHour(id: Long, request: SaveBusinessHourRequest) {
         delegate.saveBusinessHour(id, request)
     }
+
+    override fun listCategories(): ListCategoryResponse =
+        delegate.listCategories()
+
+    override fun getCategory(id: Long): GetCategoryResponse =
+        delegate.getCategory(id)
 
     private fun getFromCache(key: String): GetAccountResponse? =
         try {
