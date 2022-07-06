@@ -36,6 +36,7 @@ wutsi:
     onboard-url: https://wutsi-onboard-bff-test.herokuapp.com
     cash-url: https://wutsi-cash-bff-test.herokuapp.com
     login-url: https://wutsi-login-bff-test.herokuapp.com
+    news-url: https://wutsi-news-bff-test.herokuapp.com
     shell-url: https://wutsi-shell-bff-test.herokuapp.com
     store-url: https://wutsi-store-bff-test.herokuapp.com
   platform:
@@ -67,6 +68,10 @@ zuul:
     login:
       path: /login/**
       url: ${wutsi.application.login-url}
+      sensitiveHeaders:
+    news:
+      path: /news/**
+      url: ${wutsi.application.news-url}
       sensitiveHeaders:
     onboard:
       path: /onboard/**

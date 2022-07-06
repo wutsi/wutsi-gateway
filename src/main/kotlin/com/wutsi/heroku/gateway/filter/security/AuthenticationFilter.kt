@@ -32,7 +32,9 @@ class AuthenticationFilter(
             logger.setException(ex)
             throw ZuulRuntimeException(
                 ZuulException(
-                    "Token not valid", HttpStatus.UNAUTHORIZED.value(), ex.message
+                    "Token not valid",
+                    HttpStatus.UNAUTHORIZED.value(),
+                    ex.message
                 )
             )
         }

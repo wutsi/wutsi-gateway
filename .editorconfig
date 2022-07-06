@@ -22,3 +22,6 @@ spaces_around_brackets = outside
 spaces_around_operators = false
 wildcard_import_limit = 99
 max_line_length = off
+
+[*.{kt,kts}]
+disabled_rules=trailing-comma,multiline-if-else,annotation

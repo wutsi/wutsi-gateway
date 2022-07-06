@@ -6,6 +6,7 @@ import com.wutsi.platform.account.dto.AddPaymentMethodRequest
 import com.wutsi.platform.account.dto.AddPaymentMethodResponse
 import com.wutsi.platform.account.dto.CreateAccountRequest
 import com.wutsi.platform.account.dto.CreateAccountResponse
+import com.wutsi.platform.account.dto.EnableBusinessRequest
 import com.wutsi.platform.account.dto.GetAccountResponse
 import com.wutsi.platform.account.dto.GetCategoryResponse
 import com.wutsi.platform.account.dto.GetPaymentMethodResponse
@@ -117,6 +118,12 @@ class WutsiAccountApiCacheAware(
 
     override fun getCategory(id: Long): GetCategoryResponse =
         delegate.getCategory(id)
+
+    override fun disableBusiness(id: Long) =
+        delegate.disableBusiness(id)
+
+    override fun enableBusiness(id: Long, request: EnableBusinessRequest) =
+        delegate.enableBusiness(id, request)
 
     private fun getFromCache(key: String): GetAccountResponse? =
         try {
