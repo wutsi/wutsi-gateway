@@ -30,7 +30,7 @@
     <kotlin-mockito.version>2.2.0</kotlin-mockito.version>
     <klint.version>0.46.1</klint.version>
     <maven-antrun-plugin.version>3.1.0</maven-antrun-plugin.version>
-    <spring-cloud.version>Hoxton.SR9</spring-cloud.version>
+    <spring-cloud.version>2021.0.3</spring-cloud.version>
 
     <wutsi-platform-core.version>0.0.115</wutsi-platform-core.version>
     <wutsi-security.version>0.0.21</wutsi-security.version>
