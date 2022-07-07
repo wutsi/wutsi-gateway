@@ -90,6 +90,8 @@ logging:
   level:
     root: INFO
     com:
+      netflix:
+        zuul: DEBUG
       wutsi:
         platform:
           account:
